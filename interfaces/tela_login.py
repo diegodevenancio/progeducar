@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import (
 from banco_dados.gerenciador_banco import cadastrar_usuario
 
 from banco_dados.gerenciador_banco import verificar_login
+from interfaces.tela_principal import TelaPrincipal
+
 
 
 class RegisterWindow(QWidget):  # Janela de cadastro de usuário
@@ -91,22 +93,22 @@ class LoginWindow(QWidget):  # Janela de login
         self.setLayout(layout)
 
     def login(self):
-        email = self.email_input.text()  # Pega o email digitado
-        senha = self.senha_input.text()  # Pega a senha digitada
+            email = self.email_input.text()
+            senha = self.senha_input.text()
 
-        # Verifica se os campos estão preenchidos
-        if not email or not senha:
-            QMessageBox.warning(self, "Erro", "Preencha todos os campos.")
-            return
-        
-        from banco_dados.gerenciador_banco import autenticar_usuario
+            if not email or not senha:
+                QMessageBox.warning(self, "Erro", "Preencha todos os campos.")
+                return
 
-        # Verifica se o login está correto no banco
-        if autenticar_usuario(email, senha):
-            QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
-            # Aqui você pode chamar a próxima janela do sistema depois do login
-        else:
-            QMessageBox.warning(self, "Erro", "Email ou senha inválidos.")
+            from banco_dados.gerenciador_banco import autenticar_usuario
+
+            if autenticar_usuario(email, senha):
+                QMessageBox.information(self, "Sucesso", "Login realizado com sucesso!")
+                self.tela_principal = TelaPrincipal()  # Instancia a tela principal
+                self.tela_principal.show()              # Mostra a tela principal
+                self.close()                            # Fecha a janela de login
+            else:
+                QMessageBox.warning(self, "Erro", "Email ou senha inválidos.")
 
     def abrir_cadastro(self):
         from interfaces.tela_login import RegisterWindow
